@@ -426,3 +426,4 @@ istio:
     istio: ingressgateway-internal
   oidc_serverPrefix: /
   reWriteoidc_serverPrefix: ""
+  
