@@ -106,6 +106,11 @@ jobs:
 
   sonar_analysis:
     runs-on: ubuntu-latest
+    env:
+      NAMESPACE: ${{ secrets. dev_namespace_docker_hub }}
+      SERVICE_NAME: oidc-ui
+      SERVICE_LOCATION: oidc-ui
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -115,22 +120,21 @@ jobs:
           node-version: '14'
 
       - name: npm install
-        run: npm install --ignore-scripts
+        run: cd ${{ env.SERVICE_LOCATION }} && npm install --ignore-scripts
 
       - name: npm build
-        run: npm run-script build -- --prod --base-href . --output-path=dist
+        run: cd ${{ env.SERVICE_LOCATION }} && CI=false && npm run-script build -- --prod --base-href . --output-path=dist
 
       - name: Setup branch and env
         run: |
           # Strip git ref prefix from version
           echo "BRANCH_NAME=$(echo ${{ github.ref }} | sed -e 's,.*/\(.*\),\1,')" >> $GITHUB_ENV
           echo "GPG_TTY=$(tty)" >> $GITHUB_ENV
-
       - name: run sonar analysis
         run: |
           echo "sonar.host.url=https://sonarcloud.io/
              sonar.login=${{ secrets.SONAR_TOKEN }}
-             sonar.projectKey=mosip_oidc-ui
+             sonar.projectKey=mosip_idp-ui
              sonar.organization=${{ secrets.ORG_KEY }}
              sonar.sourceEncoding=UTF-8
              sonar.sources=src
@@ -142,4 +146,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
