@@ -1,0 +1,27 @@
+{
+    "messages":[
+        {
+            "doctorName":"Dr Alexander Kalish",
+            "days":"1",
+            "message":"I have results back from the blood culture we ran to see it"
+        },
+        {
+            "doctorName":"Dr Alexander Kalish",
+            "days":"3",
+
+            "message":"could you send your most updated email? so i can send the updated records to you"
+        },
+        {
+            "doctorName":"Samantha Kleizar",
+            "days":"4",
+
+            "message":"Just a remainder of your appointment with Dr Alexander Kalish in around"
+        },
+        {
+            "doctorName":"Dr Fariz",
+            "days":"5",
+
+            "message":"I have results back from the blood culture we ran to see it"
+        }
+    ]
+}

@@ -49,15 +49,16 @@ export default function UserProfile({
         return;
       }
 
-      if (authCode) {
+      // if (authCode) {
         getUserDetails(authCode);
-      } else {
-        setError({
-          errorCode: "authCode_missing",
-        });
-        setStatus(states.ERROR);
-        return;
-      }
+      // } 
+      // else {
+      //   setError({
+      //     errorCode: "authCode_missing",
+      //   });
+      //   setStatus(states.ERROR);
+      //   return;
+      // }
     };
     getSearchParams();
   }, []);
@@ -72,11 +73,19 @@ export default function UserProfile({
       let redirect_uri = clientDetails.redirect_uri_userprofile;
       let grant_type = clientDetails.grant_type;
 
-      var userInfo = await post_fetchUserInfo(
-        authCode,
-        client_id,
-        redirect_uri,
-        grant_type);
+      var userInfo = {
+        name:"Nagarjuna",
+        email:"nagarjuna@gmail.com",
+        gender:"Male",
+        phone_number:"9876543210",
+        birthdate:"13/05/1998",
+        address:"Banglore"
+      }
+      // var userInfo = await post_fetchUserInfo(
+      //   authCode,
+      //   client_id,
+      //   redirect_uri,
+      //   grant_type);
       setUserInfo(userInfo);
       setStatus(states.LOADED);
     } catch (errormsg) {

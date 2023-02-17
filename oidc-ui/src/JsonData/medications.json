@@ -1,0 +1,16 @@
+{
+    "medications":[
+        {
+        "tabletName":"Acebutolol 400mg",
+        "dailyDosage":"2Pill(s) Daily"
+        },
+        {
+            "tabletName":"Aluminium Hydroxide (OTC) 320mg",
+            "dailyDosage":"2Pill(s) Daily"
+        },
+        {
+            "tabletName":"Warferin 2mg",
+            "dailyDosage":"1Pill(s) Daily"
+        }
+]
+}

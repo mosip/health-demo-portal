@@ -1,0 +1,32 @@
+{
+    "claimproviders":[
+        {"providerName":"Dr Perry Dorain",
+        "providerDeptAndPlace":"Otolaryngologist - Edgecliff",
+         "days":7,
+         "costToClaimant":"$0.00",
+         "benifitePaid":"$234",
+         "totalCost":"$234"
+        },
+        {"providerName":"Dr Jasper Stone",
+        "providerDeptAndPlace":"General Practioner - Darlinghurst",
+        "days":14,
+        "costToClaimant":"$46.80",
+        "benifitePaid":"$145",
+        "totalCost":"$85"
+       },
+       {"providerName":"Dr Larry Cox",
+       "providerDeptAndPlace":"General Practioner - Darlinghurst",
+       "days":20,
+       "costToClaimant":"$23.00",
+       "benifitePaid":"$195",
+       "totalCost":"$55"
+      },
+      {"providerName":"Dr Blaire Jordan",
+      "providerDeptAndPlace":"Otolaryngologist - Bondi",
+      "days":30,
+      "costToClaimant":"$120.00",
+      "benifitePaid":"$150",
+      "totalCost":"$75"
+     }
+    ]
+}
