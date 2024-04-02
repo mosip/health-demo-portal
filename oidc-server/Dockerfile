@@ -11,14 +11,8 @@ LABEL build_time=${BUILD_TIME}
 
 # can be passed during Docker build as build time environment for github branch to pickup configuration from.
 ARG container_user=mosip
-
-# can be passed during Docker build as build time environment for github branch to pickup configuration from.
 ARG container_user_group=mosip
-
-# can be passed during Docker build as build time environment for github branch to pickup configuration from.
 ARG container_user_uid=1001
-
-# can be passed during Docker build as build time environment for github branch to pickup configuration from.
 ARG container_user_gid=1001
 
 ARG idp_api_url
@@ -34,22 +28,26 @@ WORKDIR ${work_dir}
 RUN addgroup -g ${container_user_gid} ${container_user} && \
     adduser ${container_user} -G ${container_user} -u ${container_user_uid} --disabled-password
 
-#Copy the app
+# Copy the app
 COPY . ./
-ENV PORT=8888
-ENV IDP_BASE_URL=${idp_api_url}
-ENV IDP_AUD_URL=${idp_aud_url}
-ENV CLIENT_PRIVATE_KEY=${client_private_key}
-ENV USERINFO_RESPONSE_TYPE=${userinfo_response_type}
-ENV JWE_USERINFO_PRIVATE_KEY=${jwe_userinfo_private_key}
 
-# change permissions of file inside working dir
+# Change permissions of file inside working dir
 RUN chown -R ${container_user}:${container_user} ${work_dir}
 
-# select container user for all tasks
+# Select container user for all tasks
 USER ${container_user}
+
+# Additional layers
+WORKDIR /home/${container_user}
+RUN chown -R ${container_user}:${container_user} /home/${container_user}
+USER ${container_user_uid}:${container_user_gid}
+
+# Now, copy the package.json to /home/mosip directory
+COPY package.json ./
+
+# Install dependencies
+RUN npm install
 
 EXPOSE ${PORT}
 
-RUN npm install
 CMD ["node", "./app.js"]
