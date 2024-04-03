@@ -9,7 +9,7 @@ LABEL commit_hash=${COMMIT_HASH}
 LABEL commit_id=${COMMIT_ID}
 LABEL build_time=${BUILD_TIME}
 
-# can be passed during Docker build as build time environment for github branch to pickup configuration from.
+# can be passed during Docker build as build time environment.
 ARG container_user=mosip
 ARG container_user_group=mosip
 ARG container_user_uid=1001
@@ -23,30 +23,21 @@ ARG jwe_userinfo_private_key
 
 ENV work_dir=/app
 
-WORKDIR ${work_dir}
+WORKDIR /home/${container_user}
 
 RUN addgroup -g ${container_user_gid} ${container_user} && \
-    adduser ${container_user} -G ${container_user} -u ${container_user_uid} --disabled-password
+    adduser ${container_user} -G ${container_user} -u ${container_user_uid} --disabled-password && \
+    chown -R ${container_user}:${container_user} ${work_dir} && \
+    chown -R ${container_user}:${container_user} ${HOME_DIR} && \
+    apk add --no-cache shadow && \
+    apk add --no-cache libc6-compat && \
+    npm install && \
+    npm cache clean --force
 
-# Copy the app
+# Now, copy the app
 COPY . ./
 
-# Change permissions of file inside working dir
-RUN chown -R ${container_user}:${container_user} ${work_dir}
-
-# Select container user for all tasks
-USER ${container_user}
-
-# Additional layers
-WORKDIR /home/${container_user}
-RUN chown -R ${container_user}:${container_user} /home/${container_user}
 USER ${container_user_uid}:${container_user_gid}
-
-# Now, copy the package.json to /home/mosip directory
-COPY package.json ./
-
-# Install dependencies
-RUN npm install
 
 EXPOSE ${PORT}
 
