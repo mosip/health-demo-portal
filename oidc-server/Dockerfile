@@ -25,6 +25,9 @@ ENV work_dir=/app
 
 WORKDIR /home/${container_user}
 
+# Now, copy the app
+COPY . ./
+
 RUN addgroup -g ${container_user_gid} ${container_user} && \
     adduser ${container_user} -G ${container_user} -u ${container_user_uid} --disabled-password && \
     chown -R ${container_user}:${container_user} ${work_dir} && \
@@ -33,9 +36,6 @@ RUN addgroup -g ${container_user_gid} ${container_user} && \
     apk add --no-cache libc6-compat && \
     npm install && \
     npm cache clean --force
-
-# Now, copy the app
-COPY . ./
 
 USER ${container_user_uid}:${container_user_gid}
 
