@@ -1,16 +1,44 @@
 FROM node:12.18.4-alpine as build
 
+
+# can be passed during Docker build as build time environment for artifactory URL
+ARG artifactory_url
 ARG idp_ui_base_url
 ARG oidc_base_url
 ARG redirect_uri
 ARG client_id
 ARG acrs
 
+# can be passed during Docker build as build time environment variable for mosip user level change.
+ARG container_user=mosip
+ARG container_user_group=mosip
+ARG container_user_uid=1001
+ARG container_user_gid=1001
+
+# can be passed during Docker build as build time environment for label related addition to docker.
+ARG SOURCE
+ARG COMMIT_HASH
+ARG COMMIT_ID
+ARG BUILD_TIME
+
 ENV IDP_UI_BASE_URL=$idp_ui_base_url
 ENV OIDC_BASE_URL=$oidc_base_url
 ENV REDIRECT_URI=$redirect_uri
 ENV CLIENT_ID=$client_id
 ENV ACRS=$acrs
+
+# environment variable to pass artifactory url, at docker runtime
+ENV artifactory_url_env=${artifactory_url}
+
+ENV work_dir=/usr/share/nginx/html
+
+ENV i18n_path=${work_dir}/locales
+
+# can be passed during Docker build as build time environment for label.
+LABEL source=${SOURCE}
+LABEL commit_hash=${COMMIT_HASH}
+LABEL commit_id=${COMMIT_ID}
+LABEL build_time=${BUILD_TIME}
 
 ## oidc demo portal
 WORKDIR ./app
@@ -22,31 +50,6 @@ RUN npm run build
 EXPOSE 443
 
 FROM nginx
-
-ARG SOURCE
-ARG COMMIT_HASH
-ARG COMMIT_ID
-ARG BUILD_TIME
-LABEL source=${SOURCE}
-LABEL commit_hash=${COMMIT_HASH}
-LABEL commit_id=${COMMIT_ID}
-LABEL build_time=${BUILD_TIME}
-
-# can be passed during Docker build as build time environment for github branch to pickup configuration from.
-ARG container_user=mosip
-ARG container_user_group=mosip
-ARG container_user_uid=1001
-ARG container_user_gid=1001
-
-# can be passed during Docker build as build time environment for artifactory URL
-ARG artifactory_url
-
-# environment variable to pass artifactory url, at docker runtime
-ENV artifactory_url_env=${artifactory_url}
-
-ENV work_dir=/usr/share/nginx/html
-
-ENV i18n_path=${work_dir}/locales
 
 # set working directory for the user
 WORKDIR /home/${container_user}
